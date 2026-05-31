@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IQADAM PIKIR</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1A56DB;--blue-dark:#1347B8;--blue-lightF:#EBF2FF;--blue-mid:#BFDBFF;
+  --yellow:#FBBF24;--yellow-dark:#D97706;--yellow-light:#FFFBEB;--yellow-mid:#FDE68A;
+  --white:#FFFFFF;--off-white:#F8FAFF;--gray:#6B7280;--gray-light:#E5E7EB;
+  --text:#111827;--text2:#374151;--text3:#6B7280;
+  --r:14px;--r-sm:8px;--shadow:0 2px 12px rgba(26,86,219,.10);
+}
+body{font-family:'Times New Roman',sans-serif;background:var(--off-white);color:var(--text);min-height:100vh}
+
+/* NAV */
+.nav{background:var(--blue);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(26,86,219,.25)}
+.nav-brand{display:flex;align-items:center;gap:10px;color:var(--white);font-size:18px;font-weight:800;letter-spacing:-.3px}
+.nav-brand .dot{width:10px;height:10px;background:var(--yellow);border-radius:50%;display:inline-block}
+.nav-tabs{display:flex;gap:4px}
+.ntab{padding:7px 16px;border-radius:var(--r-sm);border:none;background:transparent;color:rgba(255,255,255,.75);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.ntab:hover{background:rgba(255,255,255,.12);color:#fff}
+.ntab.active{background:rgba(255,255,255,.2);color:#fff}
+.ntab.admin-t{color:var(--yellow-mid)}
+.ntab.admin-t:hover,.ntab.admin-t.active{background:rgba(251,191,36,.15);color:var(--yellow)}
+
+/* PAGES */
+.page{display:none;max-width:780px;margin:0 auto;padding:28px 20px 60px}
+.page.show{display:block}
+
+/* HERO */
+.hero{background:var(--blue);border-radius:20px;padding:36px 32px;margin-bottom:24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero::after{content:'';position:absolute;right:40px;bottom:-60px;width:140px;height:140px;border-radius:50%;background:rgba(251,191,36,.12)}
+.hero h1{font-size:26px;font-weight:800;color:#fff;margin-bottom:6px;position:relative}
+.hero p{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:24px;position:relative}
+.stats-row{display:flex;gap:16px;position:relative}
+.stat-box{background:rgba(255,255,255,.12);border-radius:12px;padding:14px 20px;text-align:center;border:1px solid rgba(255,255,255,.15);flex:1}
+.stat-num{font-size:26px;font-weight:800;color:var(--yellow);line-height:1}
+.stat-lbl{font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;font-weight:500}
+
+/* SECTION HEADER */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-size:16px;font-weight:700;color:var(--text)}
+.sort-sel{font-size:13px;border:1.5px solid var(--gray-light);border-radius:var(--r-sm);padding:6px 12px;background:var(--white);color:var(--text);font-family:'Outfit',sans-serif;font-weight:500;cursor:pointer}
+.sort-sel:focus{outline:none;border-color:var(--blue)}
+
+/* REVIEW CARDS */
+.reviews-list{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+.r-card{background:var(--white);border:1.5px solid var(--gray-light);border-radius:var(--r);padding:20px;transition:border-color .18s,box-shadow .18s}
+.r-card:hover{border-color:var(--blue-mid);box-shadow:var(--shadow)}
+.r-card.pending{border-left:3px solid var(--yellow);opacity:.8}
+.r-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.r-author{display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--blue-dark);flex-shrink:0;border:2px solid var(--blue-mid)}
+.r-name{font-size:14px;font-weight:700;color:var(--text)}
+.r-meta{font-size:12px;color:var(--text3);margin-top:2px}
+.stars{color:var(--yellow-dark);font-size:16px;letter-spacing:2px}
+.r-text{font-size:14px;line-height:1.7;color:var(--text2);margin-bottom:12px}
+.r-tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--blue-light);color:var(--blue-dark);border:1px solid var(--blue-mid)}
+.tag.ai-tag{background:var(--yellow-light);color:var(--yellow-dark);border-color:var(--yellow-mid)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3)}
+.empty-icon{font-size:48px;margin-bottom:12px;display:block;opacity:.35}
+
+/* WRITE FORM */
+.write-card{background:var(--white);border:1.5px solid var(--gray-light);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--shadow)}
+.write-card h2{font-size:17px;font-weight:700;margin-bottom:20px;color:var(--text);display:flex;align-items:center;gap:8px}
+.write-card h2 .h-dot{width:6px;height:20px;background:var(--blue);border-radius:3px;display:inline-block}
+.form-row{margin-bottom:16px}
+.form-row label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px}
+.form-row input,.form-row textarea{width:100%;border:1.5px solid var(--gray-light);border-radius:var(--r-sm);padding:10px 14px;font-size:14px;font-family:'Outfit',sans-serif;background:var(--white);color:var(--text);outline:none;transition:border-color .18s}
+.form-row input:focus,.form-row textarea:focus{border-color:var(--blue)}
+.form-row textarea{resize:vertical;min-height:90px}
+.stars-pick{display:flex;gap:8px}
+.sp{font-size:28px;cursor:pointer;color:var(--gray-light);transition:color .15s,transform .15s;user-select:none}
+.sp:hover,.sp.on{color:var(--yellow);transform:scale(1.15)}
+.star-hint{font-size:12px;color:var(--text3);margin-top:5px;font-weight:500}
+.cats-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.cat-btn{font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;border:1.5px solid var(--gray-light);background:var(--white);color:var(--text2);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .18s}
+.cat-btn:hover{border-color:var(--blue);color:var(--blue)}
+.cat-btn.sel{background:var(--blue-light);border-color:var(--blue);color:var(--blue-dark)}
+.divider{border:none;border-top:1.5px solid var(--gray-light);margin:18px 0}
+.toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.toggle-lbl{font-size:13px;font-weight:600;color:var(--text2)}
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.tslider{position:absolute;cursor:pointer;inset:0;background:var(--gray-light);border-radius:24px;transition:.2s}
+.tslider:before{content:'';position:absolute;height:18px;width:18px;left:3px;top:3px;background:var(--white);border-radius:50%;transition:.2s}
+.toggle-switch input:checked+.tslider{background:var(--blue)}
+.toggle-switch input:checked+.tslider:before{transform:translateX(20px)}
+.ai-box{background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:var(--r-sm);padding:14px 16px}
+.ai-box-lbl{font-size:12px;font-weight:700;color:var(--blue-dark);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ai-text-out{font-size:14px;line-height:1.7;color:var(--text2);min-height:40px;white-space:pre-wrap}
+.cursor-blink{display:inline-block;width:2px;height:14px;background:var(--blue);margin-left:1px;vertical-align:middle;animation:blink .7s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{padding:10px 20px;border-radius:var(--r-sm);border:1.5px solid var(--gray-light);background:var(--white);cursor:pointer;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;color:var(--text);transition:all .18s}
+.btn:hover{background:var(--off-white);border-color:var(--blue-mid)}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-dark);border-color:var(--blue-dark)}
+.btn.yellow{background:var(--yellow);border-color:var(--yellow);color:#fff}
+.btn.yellow:hover{background:var(--yellow-dark);border-color:var(--yellow-dark)}
+.btn.danger{color:#B91C1C;border-color:#FCA5A5}
+.btn.danger:hover{background:#FEF2F2}
+.info-bar{background:var(--blue-light);border:1.5px solid var(--blue-mid);border-radius:var(--r-sm);padding:12px 16px;font-size:13px;color:var(--blue-dark);font-weight:500;display:flex;align-items:center;gap:8px}
+
+/* ADMIN */
+.admin-login-wrap{display:flex;justify-content:center;padding:40px 0}
+.admin-login{background:var(--white);border:1.5px solid var(--gray-light);border-radius:20px;padding:36px 28px;width:340px;text-align:center;box-shadow:var(--shadow)}
+.admin-login .icon-circle{width:56px;height:56px;border-radius:50%;background:var(--yellow-light);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;border:2px solid var(--yellow-mid)}
+.admin-login h2{font-size:18px;font-weight:700;margin-bottom:6px}
+.admin-login p{font-size:13px;color:var(--text3);margin-bottom:20px}
+.admin-login .hint{font-size:11px;color:var(--text3);margin-top:12px}
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.astat{background:var(--white);border:1.5px solid var(--gray-light);border-radius:var(--r);padding:16px 12px;text-align:center}
+.astat-n{font-size:24px;font-weight:800}
+.astat-n.blue{color:var(--blue)}
+.astat-n.yellow{color:var(--yellow-dark)}
+.astat-n.green{color:#059669}
+.astat-l{font-size:12px;color:var(--text3);margin-top:3px;font-weight:500}
+.admin-section{background:var(--white);border:1.5px solid var(--gray-light);border-radius:var(--r);padding:18px;margin-bottom:16px}
+.admin-section h3{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.badge-count{background:var(--yellow-light);color:var(--yellow-dark);padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid var(--yellow-mid)}
+.badge-count.blue{background:var(--blue-light);color:var(--blue-dark);border-color:var(--blue-mid)}
+.admin-r{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-light)}
+.admin-r:last-child{border-bottom:none;padding-bottom:0}
+.admin-r-info{flex:1;min-width:0}
+.admin-r-name{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.admin-r-text{font-size:13px;color:var(--text3);margin:4px 0;line-height:1.5}
+.admin-r-time{font-size:11px;color:var(--text3);font-weight:500}
+.admin-r-actions{display:flex;gap:6px;flex-shrink:0;margin-top:2px}
+.abtn{padding:5px 12px;border-radius:var(--r-sm);border:1.5px solid var(--gray-light);background:var(--white);cursor:pointer;font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;color:var(--text);transition:all .18s}
+.abtn:hover{background:var(--off-white)}
+.abtn.approve{color:#047857;border-color:#6EE7B7}
+.abtn.approve:hover{background:#ECFDF5}
+.abtn.del{color:#B91C1C;border-color:#FCA5A5}
+.abtn.del:hover{background:#FEF2F2}
+.no-items{text-align:center;padding:24px;color:var(--text3);font-size:13px;font-weight:500}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--blue);color:#fff;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;box-shadow:0 4px 20px rgba(26,86,219,.3)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.warn{background:var(--yellow-dark)}
+.toast.err{background:#DC2626}
+
+@media(max-width:600px){
+  .hero{padding:24px 20px}
+  .stats-row{gap:8px}
+  .stat-box{padding:10px}
+  .stat-num{font-size:20px}
+  .page{padding:16px 12px 60px}
+  .admin-stats{grid-template-columns:repeat(3,1fr)}
+  .nav-brand span{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="dot"></span>
+    <span>IQADAM PIKIR</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="ntab active" onclick="goPage('reviews')">&#127891; Пікірлер</button>
+    <button class="ntab" onclick="goPage('write')">&#9998; Жазу</button>
+    <button class="ntab admin-t" onclick="goPage('admin')">&#128737; Админ</button>
+  </div>
+</nav>
+
+<!-- REVIEWS PAGE -->
+<div class="page show" id="page-reviews">
+  <div class="hero">
+    <h1>Ата-аналар пікірлері</h1>
+    <p>Оқушыларымыздың ата-аналары бөліскен нақты тәжірибелер</p>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num" id="s-total">0</div><div class="stat-lbl">Пікір</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-avg">—</div><div class="stat-lbl">Орт. баға</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-5star">0</div><div class="stat-lbl">5 жұлдыз</div></div>
+    </div>
+  </div>
+  <div class="sec-head">
+    <span class="sec-title">Барлық пікірлер</span>
+    <select class="sort-sel" onchange="renderReviews()">
+      <option value="new">Жаңадан ескіге</option>
+      <option value="high">Жоғары баға</option>
+      <option value="low">Төмен баға</option>
+    </select>
+  </div>
+  <div class="reviews-list" id="reviews-list"></div>
+</div>
+
+<!-- WRITE PAGE -->
+<div class="page" id="page-write">
+  <div class="write-card">
+    <h2><span class="h-dot"></span> Пікір қалдырыңыз</h2>
+    <div class="form-row">
+      <label>Атыңыз</label>
+      <input type="text" id="w-name" placeholder="Мысалы: Айгерім" maxlength="50">
+    </div>
+    <div class="form-row">
+      <label>Баға</label>
+      <div class="stars-pick" id="stars-pick">
+        <span class="sp" data-v="1">&#9733;</span>
+        <span class="sp" data-v="2">&#9733;</span>
+        <span class="sp" data-v="3">&#9733;</span>
+        <span class="sp" data-v="4">&#9733;</span>
+        <span class="sp" data-v="5">&#9733;</span>
+      </div>
+      <div class="star-hint" id="star-label">Жұлдыз таңдаңыз</div>
+    </div>
+    <div class="form-row">
+      <label>Не ұнады? (бірнеше таңдауға болады)</label>
+      <div class="cats-grid" id="cats-grid"></div>
+    </div>
+    <hr class="divider">
+    <div class="toggle-row">
+      <span class="toggle-lbl">&#10024; AI-мен жаздыру</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="ai-toggle" onchange="toggleAI()">
+        <span class="tslider"></span>
+      </label>
+      <span style="font-size:12px;color:var(--text3)" id="toggle-hint">Өшірулі — өзіңіз жазасыз</span>
+    </div>
+    <div id="manual-sec">
+      <div class="form-row" style="margin-bottom:0">
+        <label>Пікіріңіз</label>
+        <textarea id="w-text" placeholder="Оқу орталығы туралы ойыңызды жазыңыз..."></textarea>
+      </div>
+    </div>
+    <div id="ai-sec" style="display:none">
+      <div class="ai-box">
+        <div class="ai-box-lbl">&#10024; AI жазған пікір</div>
+        <div class="ai-text-out" id="ai-preview">Жоғарыдан жұлдыз бен категория таңдасаңыз, AI пікір жазып береді.</div>
+      </div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn yellow" onclick="generateAI()" id="btn-ai">&#10024; Жаздыр</button>
+        <button class="btn" onclick="generateAI()" id="btn-regen" style="display:none">&#8635; Қайта жаздыр</button>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="submitReview()">&#10003; Жіберу</button>
+      <button class="btn" onclick="resetForm()">&#215; Тазалау</button>
+    </div>
+  </div>
+  <div class="info-bar">&#9432; Пікірлер жариялаудан бұрын администратор тексеруінен өтеді.</div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div class="page" id="page-admin">
+  <div id="admin-login-wrap" class="admin-login-wrap">
+    <div class="admin-login">
+      <div class="icon-circle">&#128737;</div>
+      <h2>Админ кіруі</h2>
+      <p>Платформаны басқару үшін кіріңіз</p>
+      <div class="form-row">
+        <input type="password" id="admin-pass" placeholder="Пароль" onkeydown="if(event.key==='Enter')adminLogin()">
+      </div>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn primary" onclick="adminLogin()">Кіру</button>
+      </div>
+    </div>
+  </div>
+  <div id="admin-panel" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <div style="font-size:17px;font-weight:700">&#128736; Админ панель</div>
+      <button class="btn danger" onclick="adminLogout()">&#8592; Шығу</button>
+    </div>
+    <div class="admin-stats" id="admin-stats"></div>
+    <div class="admin-section">
+      <h3>&#9200; Күтудегі пікірлер <span class="badge-count" id="pending-count">0</span></h3>
+      <div id="pending-list"></div>
+    </div>
+    <div class="admin-section">
+      <h3>&#10003; Бекітілген пікірлер <span class="badge-count blue" id="approved-count">0</span></h3>
+      <div id="approved-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATS=[
+  {id:'teachers',label:'&#128105;&#8205;&#127979; Мұғалімдер'},
+  {id:'program',label:'&#128218; Бағдарлама'},
+  {id:'results',label:'&#127942; Нәтиже'},
+  {id:'atmosphere',label:'&#11088; Атмосфера'},
+  {id:'individual',label:'&#127919; Жеке тәсіл'},
+  {id:'communication',label:'&#128172; Байланыс'},
+  {id:'schedule',label:'&#9200; Кесте'},
+  {id:'price',label:'&#128176; Баға-сапа'},
+  {id:'kids_like',label:'&#10084; Балаға ұнайды'},
+  {id:'progress',label:'&#128200; Прогресс'},
+];
+const STAR_LABELS=['','Нашар','Орташа','Жаман емес','Жақсы','Тамаша!'];
+
+let reviews=[], selectedRating=0, selectedCats=new Set(), aiText='', isAI=false, adminIn=false;
+
+async function load(){
+  try{const r=await window.storage.get('edu_reviews_v2');if(r&&r.value)reviews=JSON.parse(r.value);}catch(e){reviews=[];}
+  renderAll();
+}
+async function save(){try{await window.storage.set('edu_reviews_v2',JSON.stringify(reviews));}catch(e){}}
+
+function renderAll(){renderReviews();updateStats();if(adminIn)renderAdmin();}
+
+function starsHtml(n,size){return('<span style="color:#D97706;font-size:'+(size||16)+'px;letter-spacing:2px">'+'&#9733;'.repeat(n)+'<span style="color:#E5E7EB">'+'&#9733;'.repeat(5-n)+'</span></span>');}
+function initials(n){if(!n||!n.trim())return'?';const p=n.trim().split(' ');return p.length>1?p[0][0].toUpperCase()+p[1][0].toUpperCase():n.slice(0,2).toUpperCase();}
+function timeAgo(ts){const d=Date.now()-ts,m=Math.floor(d/60000),h=Math.floor(d/3600000),dd=Math.floor(d/86400000);if(m<1)return'Жаңа';if(h<1)return m+' мин бұрын';if(dd<1)return h+' сағ бұрын';if(dd<30)return dd+' күн бұрын';return new Date(ts).toLocaleDateString('kk-KZ');}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function renderReviews(){
+  const sel=document.querySelector('.sort-sel'),sort=sel?sel.value:'new';
+  const approved=reviews.filter(r=>r.approved);
+  const sorted=[...approved].sort((a,b)=>sort==='new'?b.ts-a.ts:sort==='high'?b.rating-a.rating:a.rating-b.rating);
+  const el=document.getElementById('reviews-list');
+  if(!sorted.length){el.innerHTML='<div class="empty-state"><span class="empty-icon">&#128172;</span><div style="font-size:15px;font-weight:600;margin-bottom:6px">Әлі пікір жоқ</div><div style="font-size:13px">Бірінші болып пікір қалдырыңыз!</div></div>';return;}
+  el.innerHTML=sorted.map(r=>`
+    <div class="r-card">
+      <div class="r-top">
+        <div class="r-author">
+          <div class="avatar">${initials(r.name)}</div>
+          <div>
+            <div class="r-name">${esc(r.name||'Аноним')}</div>
+            <div class="r-meta">${timeAgo(r.ts)}</div>
+          </div>
+        </div>
+        ${starsHtml(r.rating)}
+      </div>
+      <div class="r-text">${esc(r.text)}</div>
+      <div class="r-tags">
+        ${r.cats.map(c=>`<span class="tag">${CATS.find(x=>x.id===c)?.label||c}</span>`).join('')}
+        ${r.aiWritten?'<span class="tag ai-tag">&#10024; AI жазды</span>':''}
+      </div>
+    </div>`).join('');
+}
+
+function updateStats(){
+  const a=reviews.filter(r=>r.approved),n=a.length;
+  document.getElementById('s-total').textContent=n;
+  if(n){const avg=a.reduce((s,r)=>s+r.rating,0)/n;document.getElementById('s-avg').textContent=avg.toFixed(1)+'&#9733;';document.getElementById('s-5star').textContent=a.filter(r=>r.rating===5).length;}
+  else{document.getElementById('s-avg').textContent='—';document.getElementById('s-5star').textContent='0';}
+}
+
+// Build cats grid
+document.getElementById('cats-grid').innerHTML=CATS.map(c=>`<button class="cat-btn" data-id="${c.id}" onclick="toggleCat('${c.id}',this)">${c.label}</button>`).join('');
+
+// Stars
+document.querySelectorAll('.sp').forEach(s=>{
+  s.onclick=()=>{
+    selectedRating=parseInt(s.dataset.v);
+    document.querySelectorAll('.sp').forEach((x,i)=>x.classList.toggle('on',i<selectedRating));
+    document.getElementById('star-label').textContent=STAR_LABELS[selectedRating];
+  };
+});
+
+function toggleCat(id,el){if(selectedCats.has(id)){selectedCats.delete(id);el.classList.remove('sel');}else{selectedCats.add(id);el.classList.add('sel');}}
+function toggleAI(){
+  isAI=document.getElementById('ai-toggle').checked;
+  document.getElementById('manual-sec').style.display=isAI?'none':'block';
+  document.getElementById('ai-sec').style.display=isAI?'block':'none';
+  document.getElementById('toggle-hint').textContent=isAI?'Қосулі — AI жазады':'Өшірулі — өзіңіз жазасыз';
+}
+async function generateAI(){
+  if(!selectedRating){toast('★ Жұлдыз таңдаңыз','warn');return;}
+  if(!selectedCats.size){toast('🎓 Категория таңдаңыз','warn');return;}
+  
+  const btn = document.getElementById('btn-ai');
+  btn.disabled = true;
+  btn.textContent = 'Жазылуда...';
+  
+  const cats = [...selectedCats].map(id => CATS.find(c => c.id === id)?.label.replace(/^\S+\s/,''));
+  
+  try {
+    // Енді тікелей Anthropic-ке емес, өзіміздің жаңа Netlify функциямызға жібереміз
+    const res = await fetch('/.netlify/functions/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: `Оқу орталығына қазақша шынайы, жылы ата-ана пікірі жаз. Жұлдыз: ${selectedRating}/5. Жақсы жақтары: ${cats.join(', ')}. 3-4 сөйлем, табиғи тіл, тек пікір мәтіні ғана.`
+      })
+    });
+    
+    const data = await res.json();
+    
+    // Жауапты тексеріп, экранға шығару
+    aiText = data.content?.[0]?.text || 'Қате орын алды. Қайталап көріңіз.';
+    typeText(aiText, 'ai-preview');
+    document.getElementById('btn-regen').style.style.display = 'inline-block';
+  } catch(e) {
+    aiText = '';
+    document.getElementById('ai-preview').textContent = 'Интернет қатесі немесе сервер жауап бермеді.';
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = '✨ Жаздыр';
+}
+
+function typeText(text,id){
+  const el=document.getElementById(id);el.innerHTML='';let i=0;
+  const cur=document.createElement('span');cur.className='cursor-blink';
+  function t(){if(i<text.length){el.textContent=text.slice(0,++i);el.appendChild(cur);setTimeout(t,14);}else cur.remove();}
+  t();
+}
+
+async function submitReview(){
+  const name=document.getElementById('w-name').value.trim();
+  if(!selectedRating){toast('&#9733; Жұлдыз таңдаңыз','warn');return;}
+  const text=isAI?aiText:document.getElementById('w-text').value.trim();
+  if(!text){toast('&#128221; Пікір мәтінін жазыңыз','warn');return;}
+  reviews.push({id:Date.now(),name:name||'Аноним',rating:selectedRating,cats:[...selectedCats],text,aiWritten:isAI,approved:false,ts:Date.now()});
+  await save();toast('&#10003; Жіберілді! Тексеруден өткен соң жарияланады.');resetForm();renderAll();
+}
+
+function resetForm(){
+  document.getElementById('w-name').value='';document.getElementById('w-text').value='';
+  document.getElementById('ai-preview').textContent='Жоғарыдан жұлдыз бен категория таңдасаңыз, AI пікір жазып береді.';
+  document.querySelectorAll('.sp').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('ai-toggle').checked=false;toggleAI();
+  selectedRating=0;selectedCats=new Set();aiText='';
+  document.getElementById('star-label').textContent='Жұлдыз таңдаңыз';
+  document.getElementById('btn-regen').style.display='none';
+}
+
+// ADMIN
+function adminLogin(){
+  if(document.getElementById('admin-pass').value==='admin123'){
+    adminIn=true;
+    document.getElementById('admin-login-wrap').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    renderAdmin();
+  }else{toast('Пароль қате','err');}
+}
+function adminLogout(){adminIn=false;document.getElementById('admin-login-wrap').style.display='flex';document.getElementById('admin-panel').style.display='none';document.getElementById('admin-pass').value='';}
+
+function renderAdmin(){
+  const pending=reviews.filter(r=>!r.approved),approved=reviews.filter(r=>r.approved);
+  const avg=approved.length?(approved.reduce((s,r)=>s+r.rating,0)/approved.length).toFixed(1):'—';
+  document.getElementById('pending-count').textContent=pending.length;
+  document.getElementById('approved-count').textContent=approved.length;
+  document.getElementById('admin-stats').innerHTML=`
+    <div class="astat"><div class="astat-n blue">${reviews.length}</div><div class="astat-l">Барлық пікір</div></div>
+    <div class="astat"><div class="astat-n yellow">${pending.length}</div><div class="astat-l">Күтудегі</div></div>
+    <div class="astat"><div class="astat-n green">${avg}&#9733;</div><div class="astat-l">Орт. баға</div></div>`;
+  const pl=document.getElementById('pending-list');
+  pl.innerHTML=pending.length?pending.map(r=>`
+    <div class="admin-r">
+      <div class="admin-r-info">
+        <div class="admin-r-name">${esc(r.name)} ${starsHtml(r.rating,13)} ${r.aiWritten?'<span class="tag ai-tag" style="font-size:11px;padding:2px 8px">AI</span>':''}</div>
+        <div class="admin-r-text">${esc(r.text.slice(0,120))}${r.text.length>120?'...':''}</div>
+        <div class="admin-r-time">${timeAgo(r.ts)}</div>
+      </div>
+      <div class="admin-r-actions">
+        <button class="abtn approve" onclick="approveR(${r.id})">&#10003; Бекіту</button>
+        <button class="abtn del" onclick="deleteR(${r.id})">&#128465;</button>
+      </div>
+    </div>`).join(''):'<div class="no-items">&#10003; Күтудегі пікір жоқ</div>';
+  const al=document.getElementById('approved-list');
+  al.innerHTML=approved.length?approved.map(r=>`
+    <div class="admin-r">
+      <div class="admin-r-info">
+        <div class="admin-r-name">${esc(r.name)} ${starsHtml(r.rating,13)}</div>
+        <div class="admin-r-text">${esc(r.text.slice(0,100))}${r.text.length>100?'...':''}</div>
+      </div>
+      <div class="admin-r-actions">
+        <button class="abtn del" onclick="deleteR(${r.id})">&#128465;</button>
+      </div>
+    </div>`).join(''):'<div class="no-items">Бекітілген пікір жоқ</div>';
+}
+
+async function approveR(id){reviews=reviews.map(r=>r.id===id?{...r,approved:true}:r);await save();renderAll();toast('&#10003; Пікір бекітілді');}
+async function deleteR(id){reviews=reviews.filter(r=>r.id!==id);await save();renderAll();toast('&#128465; Жойылды','err');}
+
+function goPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('show');
+  const idx=['reviews','write','admin'].indexOf(name);
+  document.querySelectorAll('.ntab')[idx].classList.add('active');
+}
+
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.innerHTML=msg;t.className='toast'+(type==='warn'?' warn':type==='err'?' err':'')+' show';
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// Seed demo data
+async function seed(){
+  if(reviews.length)return;
+  reviews=[
+    {id:1,name:'Гүлнар апа',rating:5,cats:['teachers','results','kids_like'],text:'Балам бұрын математикадан қорқатын, ал қазір жарысқа қатысып жүр. Мұғалімдер өте жылы, сабырлы. Осы орталыққа берген шешімімнен өкінбеймін!',aiWritten:false,approved:true,ts:Date.now()-86400000*3},
+    {id:2,name:'Арман аға',rating:5,cats:['program','individual','progress'],text:'Бағдарлама өте нақты жасалған, балаға жеке тәсіл қолданады. 2 айда ағылшынша сөйлеп кетті. Нәтижеге риза болып отырмын.',aiWritten:false,approved:true,ts:Date.now()-86400000*7},
+    {id:3,name:'Меруерт апа',rating:4,cats:['atmosphere','communication'],text:'Атмосфера өте жағымды, балалар еркін оқиды. Мұғалімдермен байланыс тамаша — кез келген сұраққа тез жауап береді.',aiWritten:true,approved:true,ts:Date.now()-86400000},
+    {id:4,name:'Дана апа',rating:5,cats:['teachers','progress'],text:'Ұлым 3 айда есептеуден алға шықты. Мұғалімдер өте кәсіби!',aiWritten:false,approved:false,ts:Date.now()-3600000},
+  ];
+  await save();
+}
+
+seed().then(load);
+</script>
+</body>
+</html>
