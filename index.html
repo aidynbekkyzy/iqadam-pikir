@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>IQADAM PIKIR | Ата-аналар пікірлері</title>
+<title>IQADAM PIKIR | Пікірлер / Отзывы</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -17,15 +17,18 @@
 body{font-family:'Outfit',sans-serif;background:var(--off-white);color:var(--text);min-height:100vh}
 
 /* NAV */
-.nav{background:var(--blue);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(26,86,219,.25)}
+.nav{background:var(--blue);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(26,86,219,.25);flex-wrap:wrap;gap:8px;}
 .nav-brand{display:flex;align-items:center;gap:8px;color:var(--white);font-size:18px;font-weight:800;letter-spacing:-.3px}
 .nav-brand .dot{width:10px;height:10px;background:var(--yellow);border-radius:50%}
+.nav-controls{display:flex;align-items:center;gap:12px;}
 .nav-tabs{display:flex;gap:4px}
 .ntab{padding:7px 16px;border-radius:var(--r-sm);border:none;background:transparent;color:rgba(255,255,255,.75);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
 .ntab:hover{background:rgba(255,255,255,.12);color:#fff}
 .ntab.active{background:rgba(255,255,255,.2);color:#fff}
 .ntab.admin-t{color:var(--yellow-mid)}
 .ntab.admin-t:hover,.ntab.admin-t.active{background:rgba(251,191,36,.15);color:var(--yellow)}
+.lang-switch{background:rgba(255,255,255,.15);border:none;border-radius:30px;padding:6px 12px;color:white;font-weight:600;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;}
+.lang-switch:hover{background:rgba(255,255,255,.3);}
 
 /* PAGES */
 .page{display:none;max-width:800px;margin:0 auto;padding:28px 20px 60px}
@@ -132,41 +135,42 @@ body{font-family:'Outfit',sans-serif;background:var(--off-white);color:var(--tex
   .stat-box{padding:10px}
   .stat-num{font-size:22px}
   .page{padding:16px 12px 60px}
-  .nav-brand span{display:none}
+  .nav{flex-direction:column;height:auto;padding:8px 12px;}
+  .nav-controls{width:100%;justify-content:space-between;}
 }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <div class="nav-brand">
-    <span class="dot"></span>
-    <span>IQADAM PIKIR</span>
-  </div>
-  <div class="nav-tabs">
-    <button class="ntab active" onclick="goPage('reviews')">📋 Пікірлер</button>
-    <button class="ntab" onclick="goPage('write')">✍️ Жазу</button>
-    <button class="ntab admin-t" onclick="goPage('admin')">🔐 Админ</button>
+  <div class="nav-brand"><span class="dot"></span><span>IQADAM PIKIR</span></div>
+  <div class="nav-controls">
+    <div class="nav-tabs">
+      <button class="ntab active" data-page="reviews">📋 <span data-i18n="nav_reviews">Пікірлер</span></button>
+      <button class="ntab" data-page="write">✍️ <span data-i18n="nav_write">Жазу</span></button>
+      <button class="ntab admin-t" data-page="admin">🔐 <span data-i18n="nav_admin">Админ</span></button>
+    </div>
+    <button class="lang-switch" id="langToggle">🇰🇿 ҚАЗ / 🇷🇺 РУ</button>
   </div>
 </nav>
 
 <!-- REVIEWS PAGE -->
 <div class="page show" id="page-reviews">
   <div class="hero">
-    <h1>Ата-аналар пікірлері</h1>
-    <p>Оқушыларымыздың ата-аналары бөліскен нақты тәжірибелер</p>
+    <h1 data-i18n="hero_title">Ата-аналар пікірлері</h1>
+    <p data-i18n="hero_desc">Оқушыларымыздың ата-аналары бөліскен нақты тәжірибелер</p>
     <div class="stats-row">
-      <div class="stat-box"><div class="stat-num" id="s-total">0</div><div class="stat-lbl">Пікір</div></div>
-      <div class="stat-box"><div class="stat-num" id="s-avg">—</div><div class="stat-lbl">Орт. баға</div></div>
-      <div class="stat-box"><div class="stat-num" id="s-5star">0</div><div class="stat-lbl">5 жұлдыз</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-total">0</div><div class="stat-lbl" data-i18n="stat_reviews">Пікір</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-avg">—</div><div class="stat-lbl" data-i18n="stat_avg">Орт. баға</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-5star">0</div><div class="stat-lbl" data-i18n="stat_5star">5 жұлдыз</div></div>
     </div>
   </div>
   <div class="sec-head">
-    <span class="sec-title">Барлық пікірлер</span>
+    <span class="sec-title" data-i18n="all_reviews">Барлық пікірлер</span>
     <select class="sort-sel" onchange="renderReviews()">
-      <option value="new">Жаңадан ескіге</option>
-      <option value="high">Жоғары баға</option>
-      <option value="low">Төмен баға</option>
+      <option value="new" data-i18n="sort_new">Жаңадан ескіге</option>
+      <option value="high" data-i18n="sort_high">Жоғары баға</option>
+      <option value="low" data-i18n="sort_low">Төмен баға</option>
     </select>
   </div>
   <div class="reviews-list" id="reviews-list"></div>
@@ -175,91 +179,110 @@ body{font-family:'Outfit',sans-serif;background:var(--off-white);color:var(--tex
 <!-- WRITE PAGE -->
 <div class="page" id="page-write">
   <div class="write-card">
-    <h2><span class="h-dot"></span> Пікір қалдырыңыз</h2>
-    <div class="form-row">
-      <label>Атыңыз</label>
-      <input type="text" id="w-name" placeholder="Мысалы: Айгерім, Ербол" maxlength="50">
-    </div>
-    <div class="form-row">
-      <label>Баға (жұлдыз)</label>
-      <div class="stars-pick" id="stars-pick">
-        <span class="sp" data-v="1">★</span><span class="sp" data-v="2">★</span>
-        <span class="sp" data-v="3">★</span><span class="sp" data-v="4">★</span><span class="sp" data-v="5">★</span>
-      </div>
-      <div class="star-hint" id="star-label">Жұлдыз таңдаңыз</div>
-    </div>
-    <div class="form-row">
-      <label>Не ұнады? (бірнеше таңдау)</label>
-      <div class="cats-grid" id="cats-grid"></div>
-    </div>
+    <h2><span class="h-dot"></span> <span data-i18n="write_title">Пікір қалдырыңыз</span></h2>
+    <div class="form-row"><label data-i18n="label_name">Атыңыз</label><input type="text" id="w-name" placeholder="Мысалы: Айгерім"></div>
+    <div class="form-row"><label data-i18n="label_rating">Баға (жұлдыз)</label><div class="stars-pick" id="stars-pick"><span class="sp" data-v="1">★</span><span class="sp" data-v="2">★</span><span class="sp" data-v="3">★</span><span class="sp" data-v="4">★</span><span class="sp" data-v="5">★</span></div><div class="star-hint" id="star-label" data-i18n="select_star">Жұлдыз таңдаңыз</div></div>
+    <div class="form-row"><label data-i18n="label_cats">Не ұнады? (бірнеше таңдау)</label><div class="cats-grid" id="cats-grid"></div></div>
     <hr class="divider">
-    <div class="toggle-row">
-      <span class="toggle-lbl">✨ AI-мен жаздыру</span>
-      <label class="toggle-switch">
-        <input type="checkbox" id="ai-toggle" onchange="toggleAI()">
-        <span class="tslider"></span>
-      </label>
-      <span style="font-size:12px;color:var(--text3)" id="toggle-hint">Өшірулі — өзіңіз жазасыз</span>
-    </div>
-    <div id="manual-sec">
-      <div class="form-row">
-        <label>Пікіріңіз (мәтін)</label>
-        <textarea id="w-text" placeholder="Орталық туралы әсеріңізбен бөлісіңіз..."></textarea>
-      </div>
-    </div>
-    <div id="ai-sec" style="display:none">
-      <div class="ai-box">
-        <div class="ai-box-lbl">🤖 AI жазған пікір</div>
-        <div class="ai-text-out" id="ai-preview">Жұлдыз бен қалаған категорияларды таңдап, «Жаздыр» батырмасын басыңыз.</div>
-      </div>
-      <div class="btn-row" style="margin-top:10px">
-        <button class="btn yellow" id="btn-ai-gen" onclick="generateAI()">✨ Жаздыр</button>
-        <button class="btn" id="btn-regen" style="display:none" onclick="generateAI()">🔄 Қайта жаздыр</button>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn primary" onclick="submitReview()">✅ Жіберу</button>
-      <button class="btn" onclick="resetForm()">🗑 Тазалау</button>
-    </div>
+    <div class="toggle-row"><span class="toggle-lbl" data-i18n="ai_switch">✨ AI-мен жаздыру</span><label class="toggle-switch"><input type="checkbox" id="ai-toggle" onchange="toggleAI()"><span class="tslider"></span></label><span style="font-size:12px;color:var(--text3)" id="toggle-hint" data-i18n="ai_off">Өшірулі — өзіңіз жазасыз</span></div>
+    <div id="manual-sec"><div class="form-row"><label data-i18n="label_review_text">Пікіріңіз (мәтін)</label><textarea id="w-text" placeholder="Орталық туралы әсеріңізбен бөлісіңіз..."></textarea></div></div>
+    <div id="ai-sec" style="display:none"><div class="ai-box"><div class="ai-box-lbl">🤖 <span data-i18n="ai_generated_label">AI жазған пікір</span></div><div class="ai-text-out" id="ai-preview" data-i18n="ai_placeholder">Жұлдыз бен қалаған категорияларды таңдап, «Жаздыр» батырмасын басыңыз.</div></div><div class="btn-row" style="margin-top:10px"><button class="btn yellow" id="btn-ai-gen" onclick="generateAI()"><span data-i18n="btn_generate">✨ Жаздыр</span></button><button class="btn" id="btn-regen" style="display:none" onclick="generateAI()"><span data-i18n="btn_regenerate">🔄 Қайта жаздыр</span></button></div></div>
+    <div class="btn-row"><button class="btn primary" onclick="submitReview()"><span data-i18n="btn_submit">✅ Жіберу</span></button><button class="btn" onclick="resetForm()"><span data-i18n="btn_reset">🗑 Тазалау</span></button></div>
   </div>
-  <div class="info-bar">ℹ️ Пікірлер администратор тексергеннен кейін жарияланады.</div>
+  <div class="info-bar">ℹ️ <span data-i18n="info_moderation">Пікірлер администратор тексергеннен кейін жарияланады.</span></div>
 </div>
 
 <!-- ADMIN PAGE -->
 <div class="page" id="page-admin">
-  <div id="admin-login-wrap" class="admin-login-wrap">
-    <div class="admin-login">
-      <div class="icon-circle" style="font-size:32px">🔐</div>
-      <h2>Админ кіру</h2>
-      <p>Тексеру және басқару</p>
-      <div class="form-row">
-        <input type="password" id="admin-pass" placeholder="Пароль" onkeydown="if(event.key==='Enter')adminLogin()">
-      </div>
-      <button class="btn primary" onclick="adminLogin()">Кіру</button>
-    </div>
-  </div>
-  <div id="admin-panel" style="display:none">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-      <div style="font-size:17px;font-weight:700">🛠 Админ панель</div>
-      <button class="btn danger" onclick="adminLogout()">Шығу</button>
-    </div>
-    <div class="admin-stats" id="admin-stats"></div>
-    <div class="admin-section"><h3>⏳ Күтудегі пікірлер <span class="badge-count" id="pending-count">0</span></h3><div id="pending-list"></div></div>
-    <div class="admin-section"><h3>✅ Бекітілген пікірлер <span class="badge-count blue" id="approved-count">0</span></h3><div id="approved-list"></div></div>
-  </div>
+  <div id="admin-login-wrap" class="admin-login-wrap"><div class="admin-login"><div style="font-size:32px">🔐</div><h2 data-i18n="admin_login_title">Админ кіру</h2><p data-i18n="admin_login_desc">Тексеру және басқару</p><div class="form-row"><input type="password" id="admin-pass" placeholder="Пароль" onkeydown="if(event.key==='Enter')adminLogin()"></div><button class="btn primary" onclick="adminLogin()"><span data-i18n="admin_login_btn">Кіру</span></button></div></div>
+  <div id="admin-panel" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="font-size:17px;font-weight:700">🛠 <span data-i18n="admin_panel_title">Админ панель</span></div><button class="btn danger" onclick="adminLogout()"><span data-i18n="admin_logout">Шығу</span></button></div><div class="admin-stats" id="admin-stats"></div><div class="admin-section"><h3>⏳ <span data-i18n="admin_pending">Күтудегі пікірлер</span> <span class="badge-count" id="pending-count">0</span></h3><div id="pending-list"></div></div><div class="admin-section"><h3>✅ <span data-i18n="admin_approved">Бекітілген пікірлер</span> <span class="badge-count blue" id="approved-count">0</span></h3><div id="approved-list"></div></div></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
+// ---------- АУДАРМАЛАР ----------
+const translations = {
+  kk: {
+    nav_reviews: "Пікірлер", nav_write: "Жазу", nav_admin: "Админ",
+    hero_title: "Ата-аналар пікірлері", hero_desc: "Оқушыларымыздың ата-аналары бөліскен нақты тәжірибелер",
+    stat_reviews: "Пікір", stat_avg: "Орт. баға", stat_5star: "5 жұлдыз",
+    all_reviews: "Барлық пікірлер", sort_new: "Жаңадан ескіге", sort_high: "Жоғары баға", sort_low: "Төмен баға",
+    write_title: "Пікір қалдырыңыз", label_name: "Атыңыз", label_rating: "Баға (жұлдыз)", select_star: "Жұлдыз таңдаңыз",
+    label_cats: "Не ұнады? (бірнеше таңдау)", ai_switch: "✨ AI-мен жаздыру", ai_off: "Өшірулі — өзіңіз жазасыз",
+    ai_on: "Қосулы — AI жазады", label_review_text: "Пікіріңіз (мәтін)", ai_generated_label: "AI жазған пікір",
+    ai_placeholder: "Жұлдыз бен қалаған категорияларды таңдап, «Жаздыр» батырмасын басыңыз.",
+    btn_generate: "✨ Жаздыр", btn_regenerate: "🔄 Қайта жаздыр", btn_submit: "✅ Жіберу", btn_reset: "🗑 Тазалау",
+    info_moderation: "Пікірлер администратор тексергеннен кейін жарияланады.",
+    admin_login_title: "Админ кіру", admin_login_desc: "Тексеру және басқару", admin_login_btn: "Кіру",
+    admin_panel_title: "Админ панель", admin_logout: "Шығу", admin_pending: "Күтудегі пікірлер",
+    admin_approved: "Бекітілген пікірлер", toast_pending: "Пікір жіберілді! Тексеруден кейін көрсетіледі.",
+    toast_approved: "Пікір бекітілді", toast_deleted: "Пікір жойылды", toast_select_star: "⭐ Алдымен жұлдызды таңдаңыз",
+    toast_select_cat: "🏷 Кемінде бір категория таңдаңыз", toast_need_ai: "🤖 Алдымен «Жаздыр» батырмасын басыңыз",
+    toast_need_text: "✍️ Пікір мәтінін жазыңыз", toast_bad_password: "Қате пароль", empty_reviews: "Әзірге пікір жоқ. Бірінші болып пікір қалдырыңыз!",
+    no_pending: "📭 Күтудегі пікір жоқ", no_approved: "Бекітілген пікір жоқ",
+    star_labels: ['','Нашар','Орташа','Жаман емес','Жақсы','Тамаша!']
+  },
+  ru: {
+    nav_reviews: "Отзывы", nav_write: "Написать", nav_admin: "Админ",
+    hero_title: "Отзывы родителей", hero_desc: "Реальный опыт родителей наших учеников",
+    stat_reviews: "Отзывов", stat_avg: "Ср. оценка", stat_5star: "5 звёзд",
+    all_reviews: "Все отзывы", sort_new: "Сначала новые", sort_high: "Высокий рейтинг", sort_low: "Низкий рейтинг",
+    write_title: "Оставить отзыв", label_name: "Ваше имя", label_rating: "Оценка (звезды)", select_star: "Выберите звезду",
+    label_cats: "Что понравилось? (можно выбрать несколько)", ai_switch: "✨ Генерация AI", ai_off: "Выкл — пишете сами",
+    ai_on: "Вкл — пишет AI", label_review_text: "Текст отзыва", ai_generated_label: "Отзыв, написанный AI",
+    ai_placeholder: "Выберите звезду и категории, затем нажмите «Сгенерировать».",
+    btn_generate: "✨ Сгенерировать", btn_regenerate: "🔄 Сгенерировать заново", btn_submit: "✅ Отправить", btn_reset: "🗑 Очистить",
+    info_moderation: "Отзывы публикуются после проверки администратором.",
+    admin_login_title: "Вход для админа", admin_login_desc: "Управление платформой", admin_login_btn: "Войти",
+    admin_panel_title: "Панель администратора", admin_logout: "Выйти", admin_pending: "Ожидают проверки",
+    admin_approved: "Одобренные отзывы", toast_pending: "Отзыв отправлен! После проверки он появится.",
+    toast_approved: "Отзыв одобрен", toast_deleted: "Отзыв удалён", toast_select_star: "⭐ Сначала выберите оценку",
+    toast_select_cat: "🏷 Выберите хотя бы одну категорию", toast_need_ai: "🤖 Сначала нажмите «Сгенерировать»",
+    toast_need_text: "✍️ Напишите текст отзыва", toast_bad_password: "Неверный пароль", empty_reviews: "Пока нет отзывов. Будьте первым!",
+    no_pending: "📭 Нет отзывов на проверке", no_approved: "Нет одобренных отзывов",
+    star_labels: ['','Плохо','Средне','Неплохо','Хорошо','Отлично!']
+  }
+};
+let currentLang = 'kk';
+
+function setLanguage(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'kk' ? 'kk' : 'ru';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(translations[lang][key]) el.innerText = translations[lang][key];
+  });
+  // Обновить заглушку звезды
+  document.getElementById('star-label').innerText = translations[lang].select_star;
+  document.getElementById('toggle-hint').innerText = document.getElementById('ai-toggle').checked ? translations[lang].ai_on : translations[lang].ai_off;
+  // Перерисовать категории с новыми названиями
+  renderCatsGrid();
+  // Перерисовать отзывы (не меняя их текст)
+  renderReviews();
+  if(adminLoggedIn) renderAdmin();
+}
+
+function renderCatsGrid() {
+  const grid = document.getElementById('cats-grid');
+  grid.innerHTML = CATS.map(c => {
+    let label = currentLang === 'kk' ? c.labelKK : c.labelRU;
+    return `<button class="cat-btn" data-id="${c.id}" onclick="toggleCat('${c.id}',this)">${label}</button>`;
+  }).join('');
+}
+
 // ---------- КОНФИГ ----------
 const CATS = [
-  {id:'teachers', label:'👩‍🏫 Мұғалімдер'},{id:'program', label:'📚 Бағдарлама'},{id:'results', label:'🏆 Нәтиже'},
-  {id:'atmosphere', label:'✨ Атмосфера'},{id:'individual', label:'🎯 Жеке тәсіл'},{id:'communication', label:'💬 Байланыс'},
-  {id:'schedule', label:'⏱ Кесте'},{id:'price', label:'💰 Баға-сапа'},{id:'kids_like', label:'❤️ Балаға ұнайды'},
-  {id:'progress', label:'📈 Прогресс'}
+  {id:'teachers', labelKK:'👩‍🏫 Мұғалімдер', labelRU:'👩‍🏫 Учителя'},
+  {id:'program', labelKK:'📚 Бағдарлама', labelRU:'📚 Программа'},
+  {id:'results', labelKK:'🏆 Нәтиже', labelRU:'🏆 Результат'},
+  {id:'atmosphere', labelKK:'✨ Атмосфера', labelRU:'✨ Атмосфера'},
+  {id:'individual', labelKK:'🎯 Жеке тәсіл', labelRU:'🎯 Индивидуальный подход'},
+  {id:'communication', labelKK:'💬 Байланыс', labelRU:'💬 Связь'},
+  {id:'schedule', labelKK:'⏱ Кесте', labelRU:'⏱ Расписание'},
+  {id:'price', labelKK:'💰 Баға-сапа', labelRU:'💰 Цена-качество'},
+  {id:'kids_like', labelKK:'❤️ Балаға ұнайды', labelRU:'❤️ Нравится детям'},
+  {id:'progress', labelKK:'📈 Прогресс', labelRU:'📈 Прогресс'}
 ];
-const STAR_LABELS = ['','Нашар','Орташа','Жаман емес','Жақсы','Тамаша!'];
 
 let reviews = [];
 let selectedRating = 0;
@@ -268,19 +291,11 @@ let aiGeneratedText = '';
 let isAImode = false;
 let adminLoggedIn = false;
 
-// ---------- LOCALSTORAGE ҚОЛДАУ ----------
 async function loadFromStorage() {
-  try {
-    const stored = localStorage.getItem('iqadam_reviews_v3');
-    if(stored) reviews = JSON.parse(stored);
-    else reviews = [];
-  } catch(e) { reviews = []; }
+  try { const stored = localStorage.getItem('iqadam_reviews_v3'); reviews = stored ? JSON.parse(stored) : []; } catch(e) { reviews = []; }
 }
-async function saveToStorage() {
-  localStorage.setItem('iqadam_reviews_v3', JSON.stringify(reviews));
-}
+async function saveToStorage() { localStorage.setItem('iqadam_reviews_v3', JSON.stringify(reviews)); }
 
-// ---------- UI ЖАҢАРТУ ----------
 function renderReviews() {
   const sortBy = document.querySelector('.sort-sel')?.value || 'new';
   const approved = reviews.filter(r => r.approved === true);
@@ -288,30 +303,21 @@ function renderReviews() {
   if(sortBy === 'new') sorted.sort((a,b) => b.ts - a.ts);
   else if(sortBy === 'high') sorted.sort((a,b) => b.rating - a.rating);
   else sorted.sort((a,b) => a.rating - b.rating);
-  
   const container = document.getElementById('reviews-list');
   if(!sorted.length) {
-    container.innerHTML = `<div class="empty-state"><div style="font-size:40px;margin-bottom:8px">💬</div><div style="font-weight:600">Әзірге пікір жоқ</div><div>Бірінші болып пікір қалдырыңыз!</div></div>`;
+    container.innerHTML = `<div class="empty-state"><div style="font-size:40px">💬</div><div>${translations[currentLang].empty_reviews}</div></div>`;
     return;
   }
   container.innerHTML = sorted.map(r => {
     const stars = '★'.repeat(r.rating) + '☆'.repeat(5-r.rating);
     const catsHtml = r.cats.map(cid => {
       const found = CATS.find(c => c.id === cid);
-      return `<span class="tag">${found ? found.label : cid}</span>`;
+      let label = found ? (currentLang === 'kk' ? found.labelKK : found.labelRU) : cid;
+      return `<span class="tag">${label}</span>`;
     }).join('');
-    const aiBadge = r.aiWritten ? '<span class="tag ai-tag">✨ AI жазды</span>' : '';
+    const aiBadge = r.aiWritten ? '<span class="tag ai-tag">✨ AI</span>' : '';
     const initials = (r.name || 'Аноним').slice(0,2).toUpperCase();
-    return `
-      <div class="r-card">
-        <div class="r-top">
-          <div class="r-author"><div class="avatar">${initials}</div><div><div class="r-name">${escapeHtml(r.name||'Аноним')}</div><div class="r-meta">${timeAgo(r.ts)}</div></div></div>
-          <div class="stars" style="color:#D97706">${stars}</div>
-        </div>
-        <div class="r-text">${escapeHtml(r.text)}</div>
-        <div class="r-tags">${catsHtml} ${aiBadge}</div>
-      </div>
-    `;
+    return `<div class="r-card"><div class="r-top"><div class="r-author"><div class="avatar">${initials}</div><div><div class="r-name">${escapeHtml(r.name||'Аноним')}</div><div class="r-meta">${timeAgo(r.ts)}</div></div></div><div class="stars" style="color:#D97706">${stars}</div></div><div class="r-text">${escapeHtml(r.text)}</div><div class="r-tags">${catsHtml} ${aiBadge}</div></div>`;
   }).join('');
 }
 
@@ -323,10 +329,7 @@ function updateStats() {
     const avg = approved.reduce((s,r)=>s+r.rating,0)/total;
     document.getElementById('s-avg').innerHTML = avg.toFixed(1)+'★';
     document.getElementById('s-5star').innerText = approved.filter(r=>r.rating===5).length;
-  } else {
-    document.getElementById('s-avg').innerHTML = '—';
-    document.getElementById('s-5star').innerText = '0';
-  }
+  } else { document.getElementById('s-avg').innerHTML = '—'; document.getElementById('s-5star').innerText = '0'; }
 }
 
 function renderAdmin() {
@@ -336,265 +339,113 @@ function renderAdmin() {
   const avgAll = approved.length ? (approved.reduce((s,r)=>s+r.rating,0)/approved.length).toFixed(1) : '—';
   document.getElementById('pending-count').innerText = pending.length;
   document.getElementById('approved-count').innerText = approved.length;
-  document.getElementById('admin-stats').innerHTML = `
-    <div class="astat"><div class="astat-n blue">${reviews.length}</div><div class="astat-l">Барлық пікір</div></div>
-    <div class="astat"><div class="astat-n yellow">${pending.length}</div><div class="astat-l">Күтудегі</div></div>
-    <div class="astat"><div class="astat-n green">${avgAll}★</div><div class="astat-l">Орт. баға</div></div>
-  `;
+  document.getElementById('admin-stats').innerHTML = `<div class="astat"><div class="astat-n blue">${reviews.length}</div><div class="astat-l">${currentLang==='kk'?'Барлық пікір':'Все отзывы'}</div></div><div class="astat"><div class="astat-n yellow">${pending.length}</div><div class="astat-l">${currentLang==='kk'?'Күтудегі':'На проверке'}</div></div><div class="astat"><div class="astat-n green">${avgAll}★</div><div class="astat-l">${currentLang==='kk'?'Орт. баға':'Ср. оценка'}</div></div>`;
   const pendingDiv = document.getElementById('pending-list');
-  pendingDiv.innerHTML = pending.length ? pending.map(r => `
-    <div class="admin-r"><div class="admin-r-info"><div class="admin-r-name">${escapeHtml(r.name)} ${'★'.repeat(r.rating)} ${r.aiWritten?'<span class="tag ai-tag" style="font-size:10px">AI</span>':''}</div>
-    <div class="admin-r-text">${escapeHtml(r.text.slice(0,100))}${r.text.length>100?'...':''}</div><div class="admin-r-time">${timeAgo(r.ts)}</div></div>
-    <div class="admin-r-actions"><button class="abtn approve" onclick="approveReview(${r.id})">✔ Бекіту</button><button class="abtn del" onclick="deleteReview(${r.id})">🗑</button></div></div>
-  `).join('') : '<div class="no-items">📭 Күтудегі пікір жоқ</div>';
-  
+  pendingDiv.innerHTML = pending.length ? pending.map(r => `<div class="admin-r"><div class="admin-r-info"><div class="admin-r-name">${escapeHtml(r.name)} ${'★'.repeat(r.rating)} ${r.aiWritten?'<span class="tag ai-tag">AI</span>':''}</div><div class="admin-r-text">${escapeHtml(r.text.slice(0,100))}</div><div class="admin-r-time">${timeAgo(r.ts)}</div></div><div class="admin-r-actions"><button class="abtn approve" onclick="approveReview(${r.id})">✔ ${currentLang==='kk'?'Бекіту':'Одобрить'}</button><button class="abtn del" onclick="deleteReview(${r.id})">🗑</button></div></div>`).join('') : `<div class="no-items">${translations[currentLang].no_pending}</div>`;
   const approvedDiv = document.getElementById('approved-list');
-  approvedDiv.innerHTML = approved.length ? approved.map(r => `
-    <div class="admin-r"><div class="admin-r-info"><div class="admin-r-name">${escapeHtml(r.name)} ${'★'.repeat(r.rating)}</div><div class="admin-r-text">${escapeHtml(r.text.slice(0,100))}</div></div>
-    <div class="admin-r-actions"><button class="abtn del" onclick="deleteReview(${r.id})">🗑</button></div></div>
-  `).join('') : '<div class="no-items">Бекітілген пікір жоқ</div>';
+  approvedDiv.innerHTML = approved.length ? approved.map(r => `<div class="admin-r"><div class="admin-r-info"><div class="admin-r-name">${escapeHtml(r.name)} ${'★'.repeat(r.rating)}</div><div class="admin-r-text">${escapeHtml(r.text.slice(0,100))}</div></div><div class="admin-r-actions"><button class="abtn del" onclick="deleteReview(${r.id})">🗑</button></div></div>`).join('') : `<div class="no-items">${translations[currentLang].no_approved}</div>`;
 }
 
-// ---------- AI ГЕНЕРАТОР (ОФФЛАЙН, БІРАҚ ИНТЕЛЛЕКТУАЛДЫ) ----------
-function buildAIText(rating, catsArray) {
+// AI генератор с учётом языка
+function buildAIText(rating, catsArray, lang) {
   const catLabels = catsArray.map(id => {
     const found = CATS.find(c => c.id === id);
-    return found ? found.label.replace(/[^a-zA-Zа-яА-Яұүәіңғқөһ\s]/g, '').trim() : id;
+    return found ? (lang === 'kk' ? found.labelKK.replace(/[^\wа-яұүәіңғөһ\s]/gi, '').trim() : found.labelRU.replace(/[^\wа-яё]/gi, '').trim()) : id;
   });
-  const positiveWords = ['тамаша', 'керемет', 'өте жақсы', 'әсерлі', 'тиімді', 'сапалы', 'сенімді'];
-  const high = rating >= 5;
-  const mid = rating >= 4;
-  let tone = high ? 'өте жоғары деңгей' : (mid ? 'жақсы әсер' : 'орташа, бірақ оң тұстары бар');
-  
-  let intro = '';
-  if(rating === 5) intro = 'Біз өте ризамыз! ';
-  else if(rating === 4) intro = 'Жалпы жақсы әсерде болдық. ';
-  else intro = 'Орталық туралы ойларым: ';
-  
-  let middleParts = [];
-  if(catLabels.length) {
-    if(catLabels.includes('Мұғалімдер')) middleParts.push('мұғалімдер шынайы кәсіби және жылы қарым-қатынас жасайды');
-    if(catLabels.includes('Бағдарлама')) middleParts.push('бағдарлама құрылымы нақты және баланың деңгейіне бейімделген');
-    if(catLabels.includes('Нәтиже')) middleParts.push('нәтиже бірден байқалды — бағалар жақсарды');
-    if(catLabels.includes('Атмосфера')) middleParts.push('жылы, қолдау атмосферасы баланың өзіне сенімін арттырады');
-    if(catLabels.includes('Жеке тәсіл')) middleParts.push('әр оқушыға жеке тәсіл қолданылады');
-    if(catLabels.includes('Байланыс')) middleParts.push('ата-аналармен байланыс үнемі ашық және жедел');
-    if(catLabels.includes('Кесте')) middleParts.push('кесте өте ыңғайлы, сабақтарға үлгеру оңай');
-    if(catLabels.includes('Баға-сапа')) middleParts.push('баға-сапа арақатынасы тамаша');
-    if(catLabels.includes('Балаға ұнайды')) middleParts.push('балам қуана қатысады, ынтасы артты');
-    if(catLabels.includes('Прогресс')) middleParts.push('прогресс айқын көрінеді — дағдылар жақсарды');
+  if(lang === 'kk') {
+    let part = '';
+    if(catLabels.includes('Мұғалімдер')) part = 'мұғалімдер шынайы кәсіби және жылы қарым-қатынас жасайды';
+    else if(catLabels.includes('Бағдарлама')) part = 'бағдарлама құрылымы нақты және баланың деңгейіне бейімделген';
+    else if(catLabels.includes('Нәтиже')) part = 'нәтиже бірден байқалды — бағалар жақсарды';
+    else if(catLabels.includes('Атмосфера')) part = 'жылы, қолдау атмосферасы баланың өзіне сенімін арттырады';
+    else part = 'сапа мен көңіл бөлу деңгейі өте жоғары';
+    let end = rating >= 4 ? 'Ұсынамын!' : 'Жақсартуға орын бар, бірақ жалпы әсер жақсы.';
+    if(rating===5) end = 'Барлық ата-анаға ұсынамын!';
+    return `Біз өте ризамыз! ${part}. ${end}`;
+  } else {
+    let part = '';
+    if(catLabels.includes('Учителя')) part = 'учителя — настоящие профессионалы, доброжелательны';
+    else if(catLabels.includes('Программа')) part = 'структура программы четкая, адаптирована под уровень ребёнка';
+    else if(catLabels.includes('Результат')) part = 'результат заметен сразу — оценки улучшились';
+    else if(catLabels.includes('Атмосфера')) part = 'тёплая, поддерживающая атмосфера повышает уверенность';
+    else part = 'качество и внимание к детям на высоком уровне';
+    let end = rating >= 4 ? 'Рекомендую!' : 'Есть куда расти, но в целом впечатление хорошее.';
+    if(rating===5) end = 'Однозначно рекомендую всем родителям!';
+    return `Мы очень довольны! ${part}. ${end}`;
   }
-  if(middleParts.length === 0) middleParts = ['орталықта білім сапасы мен көңіл бөлу деңгейі жоғары'];
-  let body = middleParts.slice(0,3).join(', ');
-  let conclusion = rating >= 4 ? 'Ұсынамын!' : 'Келешекте жақсаруына сенемін, бірақ қазірдің өзінде жақсы нәтиже бар.';
-  if(rating === 5) conclusion = 'Барлық ата-анаға ұсынамын!';
-  let fullText = `${intro} ${body}. ${conclusion}`;
-  fullText = fullText.charAt(0).toUpperCase() + fullText.slice(1);
-  return fullText;
 }
 
 async function generateAI() {
-  if(!selectedRating) { toast('⭐ Алдымен жұлдызды таңдаңыз', 'warn'); return; }
-  if(selectedCats.size === 0) { toast('🏷 Кемінде бір категория таңдаңыз', 'warn'); return; }
-  
+  if(!selectedRating) { toast(translations[currentLang].toast_select_star, 'warn'); return; }
+  if(selectedCats.size === 0) { toast(translations[currentLang].toast_select_cat, 'warn'); return; }
   const genBtn = document.getElementById('btn-ai-gen');
-  const regenBtn = document.getElementById('btn-regen');
   genBtn.disabled = true;
-  genBtn.textContent = '🧠 Жазылуда...';
-  
-  await new Promise(r => setTimeout(r, 380));
+  genBtn.innerHTML = currentLang === 'kk' ? '🧠 Жазылуда...' : '🧠 Генерация...';
+  await new Promise(r => setTimeout(r, 300));
   const catsArray = Array.from(selectedCats);
-  const generated = buildAIText(selectedRating, catsArray);
-  aiGeneratedText = generated;
+  aiGeneratedText = buildAIText(selectedRating, catsArray, currentLang);
   typeWriterEffect(aiGeneratedText, 'ai-preview');
-  if(regenBtn) regenBtn.style.display = 'inline-block';
+  document.getElementById('btn-regen').style.display = 'inline-block';
   genBtn.disabled = false;
-  genBtn.innerHTML = '✨ Жаздыр';
+  genBtn.innerHTML = currentLang === 'kk' ? '✨ Жаздыр' : '✨ Сгенерировать';
 }
 
 function typeWriterEffect(text, elementId) {
-  const el = document.getElementById(elementId);
-  if(!el) return;
-  el.innerHTML = '';
-  let i = 0;
-  const cursorSpan = document.createElement('span');
-  cursorSpan.className = 'cursor-blink';
-  function step() {
-    if(i < text.length) {
-      el.innerHTML = text.slice(0, i+1);
-      el.appendChild(cursorSpan);
-      i++;
-      setTimeout(step, 18);
-    } else {
-      if(cursorSpan.parentNode) cursorSpan.remove();
-    }
-  }
+  const el = document.getElementById(elementId); if(!el) return;
+  el.innerHTML = ''; let i = 0;
+  const cursor = document.createElement('span'); cursor.className = 'cursor-blink';
+  function step() { if(i < text.length) { el.innerHTML = text.slice(0, i+1); el.appendChild(cursor); i++; setTimeout(step, 18); } else if(cursor.parentNode) cursor.remove(); }
   step();
 }
 
-// ---------- ФОРМА ӘРЕКЕТТЕРІ ----------
 function toggleCat(id, btnElem) {
   if(selectedCats.has(id)) { selectedCats.delete(id); btnElem.classList.remove('sel'); }
   else { selectedCats.add(id); btnElem.classList.add('sel'); }
 }
-
 function toggleAI() {
   isAImode = document.getElementById('ai-toggle').checked;
   document.getElementById('manual-sec').style.display = isAImode ? 'none' : 'block';
   document.getElementById('ai-sec').style.display = isAImode ? 'block' : 'none';
-  document.getElementById('toggle-hint').innerText = isAImode ? '✅ Қосулы — AI жазады' : '🔘 Өшірулі — өзіңіз жазасыз';
+  document.getElementById('toggle-hint').innerText = isAImode ? translations[currentLang].ai_on : translations[currentLang].ai_off;
   if(!isAImode) aiGeneratedText = '';
 }
-
 async function submitReview() {
   const name = document.getElementById('w-name').value.trim();
-  if(!selectedRating) { toast('★ Жұлдыз таңдалмаған', 'warn'); return; }
+  if(!selectedRating) { toast(translations[currentLang].toast_select_star, 'warn'); return; }
   let finalText = '';
-  if(isAImode) {
-    if(!aiGeneratedText) { toast('🤖 Алдымен «Жаздыр» батырмасын басыңыз', 'warn'); return; }
-    finalText = aiGeneratedText;
-  } else {
-    finalText = document.getElementById('w-text').value.trim();
-    if(!finalText) { toast('✍️ Пікір мәтінін жазыңыз', 'warn'); return; }
-  }
-  const newId = Date.now();
-  reviews.push({
-    id: newId,
-    name: name || 'Аноним',
-    rating: selectedRating,
-    cats: Array.from(selectedCats),
-    text: finalText,
-    aiWritten: isAImode,
-    approved: false,
-    ts: Date.now()
-  });
+  if(isAImode) { if(!aiGeneratedText) { toast(translations[currentLang].toast_need_ai, 'warn'); return; } finalText = aiGeneratedText; }
+  else { finalText = document.getElementById('w-text').value.trim(); if(!finalText) { toast(translations[currentLang].toast_need_text, 'warn'); return; } }
+  reviews.push({ id: Date.now(), name: name || (currentLang==='kk'?'Аноним':'Аноним'), rating: selectedRating, cats: Array.from(selectedCats), text: finalText, aiWritten: isAImode, approved: false, ts: Date.now() });
   await saveToStorage();
-  toast('✅ Пікір жіберілді! Тексеруден кейін көрсетіледі.', 'ok');
+  toast(translations[currentLang].toast_pending, 'ok');
   resetForm();
-  renderReviews();
-  updateStats();
+  renderReviews(); updateStats();
   if(adminLoggedIn) renderAdmin();
 }
-
 function resetForm() {
-  document.getElementById('w-name').value = '';
-  document.getElementById('w-text').value = '';
-  document.getElementById('ai-preview').innerHTML = 'Жұлдыз бен категорияларды таңдап, «Жаздыр» батырмасын басыңыз.';
+  document.getElementById('w-name').value = ''; document.getElementById('w-text').value = '';
+  document.getElementById('ai-preview').innerHTML = translations[currentLang].ai_placeholder;
   document.querySelectorAll('.sp').forEach(s => s.classList.remove('on'));
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('sel'));
   document.getElementById('ai-toggle').checked = false;
-  selectedRating = 0;
-  selectedCats.clear();
-  aiGeneratedText = '';
-  document.getElementById('star-label').innerText = 'Жұлдыз таңдаңыз';
+  selectedRating = 0; selectedCats.clear(); aiGeneratedText = '';
+  document.getElementById('star-label').innerText = translations[currentLang].select_star;
   document.getElementById('btn-regen').style.display = 'none';
   toggleAI();
 }
-
-// ---------- АДМИН ----------
-function adminLogin() {
-  const pass = document.getElementById('admin-pass').value;
-  if(pass === 'admin123') {
-    adminLoggedIn = true;
-    document.getElementById('admin-login-wrap').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    renderAdmin();
-  } else toast('Қате пароль', 'err');
-}
-function adminLogout() {
-  adminLoggedIn = false;
-  document.getElementById('admin-login-wrap').style.display = 'flex';
-  document.getElementById('admin-panel').style.display = 'none';
-  document.getElementById('admin-pass').value = '';
-}
-async function approveReview(id) {
-  reviews = reviews.map(r => r.id === id ? {...r, approved: true} : r);
-  await saveToStorage();
-  renderReviews();
-  updateStats();
-  if(adminLoggedIn) renderAdmin();
-  toast('Пікір бекітілді', 'ok');
-}
-async function deleteReview(id) {
-  reviews = reviews.filter(r => r.id !== id);
-  await saveToStorage();
-  renderReviews();
-  updateStats();
-  if(adminLoggedIn) renderAdmin();
-  toast('Пікір жойылды', 'err');
-}
-
-// ---------- КӨМЕКШІ ФУНКЦИЯЛАР ----------
+function adminLogin() { if(document.getElementById('admin-pass').value === 'admin123') { adminLoggedIn=true; document.getElementById('admin-login-wrap').style.display='none'; document.getElementById('admin-panel').style.display='block'; renderAdmin(); } else toast(translations[currentLang].toast_bad_password,'err'); }
+function adminLogout() { adminLoggedIn=false; document.getElementById('admin-login-wrap').style.display='flex'; document.getElementById('admin-panel').style.display='none'; document.getElementById('admin-pass').value=''; }
+async function approveReview(id) { reviews = reviews.map(r => r.id===id ? {...r, approved:true} : r); await saveToStorage(); renderReviews(); updateStats(); if(adminLoggedIn) renderAdmin(); toast(translations[currentLang].toast_approved,'ok'); }
+async function deleteReview(id) { reviews = reviews.filter(r => r.id !== id); await saveToStorage(); renderReviews(); updateStats(); if(adminLoggedIn) renderAdmin(); toast(translations[currentLang].toast_deleted,'err'); }
 function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-function timeAgo(ts) {
-  const sec = Math.floor((Date.now() - ts)/1000);
-  if(sec<60) return 'жарты сағат бұрын';
-  const min = Math.floor(sec/60);
-  if(min<60) return `${min} минут бұрын`;
-  const hour = Math.floor(min/60);
-  if(hour<24) return `${hour} сағат бұрын`;
-  const day = Math.floor(hour/24);
-  if(day<30) return `${day} күн бұрын`;
-  return new Date(ts).toLocaleDateString('kk-KZ');
-}
-function toast(msg, type='ok') {
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.className = 'toast show';
-  if(type==='warn') t.classList.add('warn');
-  else if(type==='err') t.classList.add('err');
-  else t.classList.remove('warn','err');
-  setTimeout(()=> t.classList.remove('show'), 2800);
-}
-function goPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
-  document.querySelectorAll('.ntab').forEach(b => b.classList.remove('active'));
-  document.getElementById(`page-${name}`).classList.add('show');
-  const idx = ['reviews','write','admin'].indexOf(name);
-  if(idx!==-1) document.querySelectorAll('.ntab')[idx].classList.add('active');
-  if(name==='admin' && adminLoggedIn) renderAdmin();
-}
-
-// ---------- ИНИЦИАЛИЗАЦИЯ ----------
-function initCategories() {
-  const grid = document.getElementById('cats-grid');
-  grid.innerHTML = CATS.map(c => `<button class="cat-btn" data-id="${c.id}" onclick="toggleCat('${c.id}',this)">${c.label}</button>`).join('');
-}
-function initStars() {
-  const sps = document.querySelectorAll('.sp');
-  sps.forEach((star, idx) => {
-    star.onclick = () => {
-      selectedRating = parseInt(star.dataset.v);
-      sps.forEach((s,i) => {
-        if(i < selectedRating) s.classList.add('on');
-        else s.classList.remove('on');
-      });
-      document.getElementById('star-label').innerText = STAR_LABELS[selectedRating] || 'Таңдалды';
-    };
-  });
-}
-
-async function seedDemo() {
-  if(reviews.length === 0) {
-    reviews = [
-      {id:1001, name:'Гүлнар апа', rating:5, cats:['teachers','results','kids_like'], text:'Балам бұрын математикадан қорқатын, қазір жарысқа қатысып жүр. Мұғалімдер өте жылы, сабырлы. Ұсынамын!', aiWritten:false, approved:true, ts:Date.now()-86400000*4},
-      {id:1002, name:'Арман аға', rating:5, cats:['program','individual','progress'], text:'Бағдарлама нақты, жеке тәсіл тамаша. 2 айда ағылшын тілінде сөйлеп кетті.', aiWritten:false, approved:true, ts:Date.now()-86400000*2},
-      {id:1003, name:'Меруерт', rating:4, cats:['atmosphere','communication'], text:'Атмосфера жағымды, балалар еркін. Байланыс тамаша.', aiWritten:true, approved:true, ts:Date.now()-86400000*1},
-      {id:1004, name:'Дана', rating:5, cats:['teachers','progress'], text:'Ұлым 3 айда есептеуден озып кетті. Керемет мұғалімдер!', aiWritten:false, approved:false, ts:Date.now()-7200000}
-    ];
-    await saveToStorage();
-  }
-}
-
-(async function start() {
-  await loadFromStorage();
-  await seedDemo();
-  initCategories();
-  initStars();
-  toggleAI();
-  renderReviews();
-  updateStats();
-})();
+function timeAgo(ts) { const sec = Math.floor((Date.now()-ts)/1000); if(sec<60) return currentLang==='kk'?'жарты сағат бұрын':'недавно'; const min = Math.floor(sec/60); if(min<60) return `${min} ${currentLang==='kk'?'минут бұрын':'мин назад'}`; const hour = Math.floor(min/60); if(hour<24) return `${hour} ${currentLang==='kk'?'сағат бұрын':'ч назад'}`; const day = Math.floor(hour/24); if(day<30) return `${day} ${currentLang==='kk'?'күн бұрын':'дн. назад'}`; return new Date(ts).toLocaleDateString(currentLang==='kk'?'kk-KZ':'ru-RU'); }
+function toast(msg, type='ok') { const t=document.getElementById('toast'); t.innerText=msg; t.className='toast show'; if(type==='warn') t.classList.add('warn'); else if(type==='err') t.classList.add('err'); else t.classList.remove('warn','err'); setTimeout(()=> t.classList.remove('show'), 2800); }
+function goPage(pageName) { document.querySelectorAll('.page').forEach(p => p.classList.remove('show')); document.querySelectorAll('.ntab').forEach(b => b.classList.remove('active')); document.getElementById(`page-${pageName}`).classList.add('show'); const btns = document.querySelectorAll('.ntab'); const idx = ['reviews','write','admin'].indexOf(pageName); if(idx!==-1) btns[idx].classList.add('active'); if(pageName==='admin' && adminLoggedIn) renderAdmin(); }
+function initStars() { document.querySelectorAll('.sp').forEach((star,idx)=>{ star.onclick = () => { selectedRating = parseInt(star.dataset.v); document.querySelectorAll('.sp').forEach((s,i)=>{ if(i<selectedRating) s.classList.add('on'); else s.classList.remove('on'); }); document.getElementById('star-label').innerText = translations[currentLang].star_labels[selectedRating]; }; }); }
+async function seedDemo() { if(reviews.length===0) { reviews = [ {id:1001,name:currentLang==='kk'?'Гүлнар апа':'Гульнар апа',rating:5,cats:['teachers','results'],text:currentLang==='kk'?'Балам бұрын математикадан қорқатын, қазір жарысқа қатысып жүр. Ұсынамын!':'Мой сын раньше боялся математики, теперь участвует в олимпиадах. Рекомендую!',aiWritten:false,approved:true,ts:Date.now()-86400000*3} ]; await saveToStorage(); } }
+// ИНИЦИАЛИЗАЦИЯ
+document.getElementById('langToggle').addEventListener('click', () => { setLanguage(currentLang === 'kk' ? 'ru' : 'kk'); });
+(async function() { await loadFromStorage(); await seedDemo(); setLanguage('kk'); initStars(); renderCatsGrid(); toggleAI(); renderReviews(); updateStats(); document.querySelectorAll('.ntab').forEach(btn => { btn.onclick = () => goPage(btn.getAttribute('data-page')); }); })();
 </script>
 </body>
 </html>
